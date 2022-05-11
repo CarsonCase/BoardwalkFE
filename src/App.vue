@@ -27,5 +27,5 @@ import HelloWorld from "@/components/HelloWorld.vue";
 </template>
 
 <style>
-@import "@/assets/base.css";
+/*@import "@/assets/base.css";*/
 </style>
