@@ -1,18 +1,29 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Web3 from "web3";
+import Treasury from "../../smartContractDeployments/rinkeby/Treasury.json";
+import type { AbiItem } from "web3-utils";
 
 const error = ref<string | null>(null);
 const connected = ref(false);
 
 async function connectWallet() {
-    const web3 = await loadWeb3();
-    if (!web3) {
-        error.value = "No Ethereum support detected in browser. Consider using MetaMask!";
-        return;
+    try {
+        const web3 = await loadWeb3();
+        if (!web3) {
+            error.value = "No Ethereum support detected in browser. Consider using MetaMask!";
+            return;
+        }
+
+        const { address, treasuryContract } = await loadBlockchainData(web3);
+
+        error.value = null;
+        connected.value = true;
+    } catch (e) {
+        console.error(e);
+        error.value = "Unexpected Error";
+        connected.value = false;
     }
-    error.value = null;
-    connected.value = true;
 }
 
 async function loadWeb3() {
@@ -30,6 +41,14 @@ async function loadWeb3() {
     } else {
         return null;
     }
+}
+
+async function loadBlockchainData(web3: Web3) {
+    const accounts = await web3.eth.getAccounts();
+    const address = accounts[0];
+    const treasuryContract = new web3.eth.Contract((Treasury.abi as AbiItem[]), Treasury.address);
+
+    return { address, treasuryContract };
 }
 </script>
 
