@@ -9,6 +9,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "@": fileURLToPath(new URL("./src", import.meta.url)),
+            web3: "web3/dist/web3.min.js", //need to investigate why this is needed
         },
     },
 });
