@@ -1,27 +1,22 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "@/components/HelloWorld.vue";
 </script>
 
 <template>
-    <header>
-        <img
-            alt="Vue logo"
-            class="logo"
-            src="@/assets/logo.svg"
-            width="125"
-            height="125"
-        />
-
-        <div class="wrapper">
-            <HelloWorld msg="You did it!" />
-
-            <nav>
-                <RouterLink to="/">Home</RouterLink>
-                <RouterLink to="/about">About</RouterLink>
-            </nav>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container-lg">
+            <a class="navbar-brand h1 mb-0" href="#">Boardwalk</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="navbar-nav">
+                    <RouterLink class="nav-link" to="/" active-class="active">Home</RouterLink>
+                    <RouterLink class="nav-link" to="/about" active-class="active">About</RouterLink>
+                </div>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <RouterView />
 </template>
