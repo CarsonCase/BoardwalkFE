@@ -6,6 +6,11 @@ import type { AbiItem } from "web3-utils";
 import { ref } from "vue";
 import type { Contract } from "web3-eth-contract";
 import type { Strategy } from "@/model/Strategy";
+import { ethers } from "ethers";
+import { Framework } from "@superfluid-finance/sdk-core";
+import BN from "bn.js";
+
+const TREASURY_ADDRESS = "0x6D992c2a6B112F856d2D7da364b5453c6c94f60e";
 
 class Web3Util {
     public isWeb3Loaded = ref(false);
@@ -115,6 +120,58 @@ class Web3Util {
         const treasuryContract = new web3.eth.Contract((Treasury.abi as AbiItem[]), Treasury.address);
 
         return { address, treasuryContract };
+    }
+
+    public async createSuperFluidFlow(amount: string, stratContract: Contract) {
+        const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+        const web3 = await this.getWeb3();
+
+        const signer = provider.getSigner();
+        const flowRate = await stratContract.methods.getFlowRate(web3.utils.toWei(amount)).call();
+
+        const chainId = await (window as any).ethereum.request({ method: "eth_chainId" });
+        const sf = await Framework.create({
+            chainId: Number(chainId),
+            provider: provider
+        });
+        const DAIxContract = await sf.loadSuperToken("fDAIx");
+        const DAIx = DAIxContract.address;
+        try {
+            const createFlowOperation = sf.cfaV1.createFlow({
+                receiver: TREASURY_ADDRESS,
+                flowRate: flowRate,
+                superToken: DAIx
+            });
+            console.log("Creating your stream...");
+            const result = await createFlowOperation.exec(signer);
+            console.log(result);
+
+            console.log(
+                `Congrats - you've just created a money stream!
+                View Your Stream At: https://app.superfluid.finance/dashboard/${TREASURY_ADDRESS}
+                Network: Kovan
+                Super Token: DAIx
+                Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
+                Receiver: ${TREASURY_ADDRESS},
+                FlowRate: ${flowRate}
+                `
+            );
+        } catch (error) {
+            console.log("Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address!");
+            console.error(error);
+            throw error;
+        }
+    }
+
+    public async approveSwap(strategyAddress: string) {
+        const stableCoinContract = await this.getStableCoinContract();
+        const largestUint256 = new BN(2).pow(new BN(256)).sub(new BN(1)).toString();
+        await stableCoinContract.methods.approve(strategyAddress, largestUint256)
+            .send({ from: this.userAddress });
+    }
+
+    public async buySwap(strategyContract: Contract, amount: string) {
+        await strategyContract.methods.buySwap(amount).send({from: this.userAddress});
     }
 }
 
