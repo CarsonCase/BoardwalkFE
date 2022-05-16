@@ -18,18 +18,28 @@ async function connectWallet() {
 </script>
 
 <template>
-    <h2 v-if="!error">Connect Wallet to start using Swaps</h2>
-    <template v-if="error">
-        <h2>Could not connect to wallet:</h2>
-        <h3>{{error}}</h3>
-    </template>
-    <template v-if="Web3Util.isWalletConnected.value">
-        <h2>Connected to Wallet</h2>
-    </template>
-    <button @click="connectWallet" v-if="!error" type="button" class="btn btn-primary">
-        Connect Wallet
-    </button>
-    <button @click="connectWallet" v-if="error" type="button" class="btn btn-warning">
-        Retry Connect Wallet
-    </button>
+    <div class="card col-md-6">
+        <div class="card-header">
+            <template v-if="!error">
+                Connect Wallet with <b>Boardwalk</b>
+            </template>
+            <template v-else>
+                Problem Connecting Wallet
+            </template>
+        </div>
+        <div class="card-body">
+            <button @click="connectWallet" v-if="!error" type="button" class="btn btn-primary mb-2">
+                Connect Wallet <i class="fa-solid fa-wallet"></i>
+            </button>
+            <template v-else>
+                <p class="card-text">
+                    {{error}}
+                </p>
+                <button @click="connectWallet" type="button" class="btn btn-warning">
+                    Retry Connect Wallet <i class="fa-solid fa-wallet"></i>
+                </button>
+            </template>
+            <p class="card-text text-muted">(Compatible browser or addon required)</p>
+        </div>
+    </div>
 </template>

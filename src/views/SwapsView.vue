@@ -11,9 +11,18 @@ const strategies = ref([
 </script>
 
 <template>
+    <div class="py-2" style="background-color: #3471c1">
+        <div class="container-lg">
+            <h1 class="text-light" style="text-shadow: -2px 2px black;">Swap Trading</h1>
+        </div>
+    </div>
+
     <div class="container-lg">
-        <h1>This is the Swaps view</h1>
-        <WalletConnectionInit v-if="!Web3Util.isWalletConnected.value" />
+        <template v-if="!Web3Util.isWalletConnected.value">
+            <h2 class="my-3">Connect wallet to start trading swaps</h2>
+            <WalletConnectionInit/>
+        </template>
+
         <h2 v-else>
             Wallet Connected
             <!-- TODO: show some wallet details -->
