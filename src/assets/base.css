@@ -1,1 +1,59 @@
-/* placeholder file if necessary */
+/* Monopoly card adapted from: https://youtu.be/WCli_MR_j0U
+for use in bootstrap / responsive sizing */
+
+.monopoly-card {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.monopoly-card .monopoly-content {
+    /*width: 85%;*/
+    /*height: 85%;*/
+    margin: 1rem;
+    border: 2px solid black;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.monopoly-card .monopoly-content .monopoly-title {
+    width: 100%;
+    background-color: #3471c1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    text-transform: uppercase;
+    border: 2px solid black;
+}
+
+.monopoly-card .monopoly-content .monopoly-details {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+.monopoly-card .monopoly-content .monopoly-details .monopoly-rents {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    font-weight: bold;
+    margin: 1px;
+}
+
+.monopoly-rents p {
+    margin-bottom: 0;
+}
+
+.monopoly-card .monopoly-content .extra {
+    width: 55%;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    text-align: center;
+}
