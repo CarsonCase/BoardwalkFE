@@ -19,8 +19,8 @@ async function connectWallet() {
 </script>
 
 <template>
-    <div class="card col-md-6">
-        <div class="card-header">
+    <div class="card col-md-6 col-xl-4 my-3">
+        <div v-if="!Web3Util.isWalletConnected.value" class="card-header">
             <template v-if="!error">
                 Connect Wallet with <b>Boardwalk</b>
             </template>
@@ -29,18 +29,23 @@ async function connectWallet() {
             </template>
         </div>
         <div class="card-body">
-            <button @click="connectWallet" v-if="!error" type="button" class="btn btn-primary mb-2">
-                Connect Wallet <i class="fa-solid fa-wallet"></i>
-            </button>
+            <h4 v-if="Web3Util.isWalletConnected.value" class="mb-0">
+                Wallet Connected <i class="fa-solid fa-wallet"></i>
+            </h4>
             <template v-else>
-                <p class="card-text">
-                    {{error}}
-                </p>
-                <button @click="connectWallet" type="button" class="btn btn-warning">
-                    Retry Connect Wallet <i class="fa-solid fa-wallet"></i>
+                <button @click="connectWallet" v-if="!error" type="button" class="btn btn-primary mb-2">
+                    Connect Wallet <i class="fa-solid fa-wallet"></i>
                 </button>
+                <template v-else>
+                    <p class="card-text">
+                        {{ error }}
+                    </p>
+                    <button @click="connectWallet" type="button" class="btn btn-warning">
+                        Retry Connect Wallet <i class="fa-solid fa-wallet"></i>
+                    </button>
+                </template>
+                <p class="card-text text-muted">(Compatible browser or addon required)</p>
             </template>
-            <p class="card-text text-muted">(Compatible browser or addon required)</p>
         </div>
     </div>
 </template>

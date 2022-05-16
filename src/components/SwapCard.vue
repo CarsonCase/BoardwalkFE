@@ -70,6 +70,9 @@ function showErrorToast(message: string) {
 }
 
 function extractErrorMessage(error: any): string {
+    if (error.errorObject && error.errorObject.errorObject && error.errorObject.errorObject.reason) {
+        return error.errorObject.errorObject.reason;
+    }
     if (error.message) {
         return error.message;
     }
