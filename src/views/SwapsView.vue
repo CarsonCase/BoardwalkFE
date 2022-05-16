@@ -20,7 +20,7 @@ const strategies = ref([
         </h2>
         <div v-if="Web3Util.isWalletConnected.value" class="container-lg">
             <div class="row">
-                <div class="col-4">
+                <div class="col-md-6 col-xl-4">
                     <SwapCard :strategy="strategies[0]" />
                 </div>
             </div>
