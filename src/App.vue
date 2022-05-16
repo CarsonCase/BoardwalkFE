@@ -5,13 +5,15 @@ import { RouterLink, RouterView } from "vue-router";
 <template>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-lg">
-            <RouterLink class="navbar-brand h1 mb-0" to="/" active-class="active">Boardwalk</RouterLink>
+            <RouterLink class="navbar-brand h1 mb-0" to="/" active-class="active">
+                <img class="bg-secondary" src="@/assets/game-board.png" height="30">
+                Boardwalk
+            </RouterLink>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
                 <div class="navbar-nav">
-                    <RouterLink class="nav-link" to="/about" active-class="active">About</RouterLink>
                     <RouterLink class="nav-link" to="/swaps" active-class="active">Swaps</RouterLink>
                     <RouterLink class="nav-link" to="/dummySwaps" active-class="active">DummySwaps</RouterLink>
                 </div>
