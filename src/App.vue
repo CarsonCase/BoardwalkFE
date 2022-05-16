@@ -13,6 +13,7 @@ import { RouterLink, RouterView } from "vue-router";
                 <div class="navbar-nav">
                     <RouterLink class="nav-link" to="/about" active-class="active">About</RouterLink>
                     <RouterLink class="nav-link" to="/swaps" active-class="active">Swaps</RouterLink>
+                    <RouterLink class="nav-link" to="/dummySwaps" active-class="active">DummySwaps</RouterLink>
                 </div>
             </div>
         </div>

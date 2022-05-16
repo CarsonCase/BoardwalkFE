@@ -7,6 +7,7 @@ const error = ref<string | null>(null);
 async function connectWallet() {
     try {
         await Web3Util.connectWallet();
+        error.value = null;
     } catch (e) {
         if (e instanceof Error) {
             error.value = e.message;

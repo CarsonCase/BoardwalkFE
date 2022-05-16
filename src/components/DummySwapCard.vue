@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { Strategy } from "@/model/Strategy";
-import Web3Util from "@/stores/Web3Util";
-import Web3 from "web3";
-import BN from "bn.js";
 import { onMounted, ref } from "vue";
 import type { Contract } from "web3-eth-contract";
 
@@ -25,40 +22,22 @@ let stratContract: Contract;
 const toastErrorMessage = ref("");
 
 onMounted(async () => {
-    stratContract = await Web3Util.getStrategyContractInstance(props.strategy);
-    const invested = await stratContract.methods.underlyingInvested().call();
-    const exposed = await stratContract.methods.underlyingExposedToSwaps().call();
-    tvl.value = Web3.utils.fromWei(exposed);
-    balance.value = Web3.utils.fromWei(new BN(invested).sub(new BN(exposed)));
-    allowance.value = await Web3Util.getAllowanceForStrategy(props.strategy);
-    isApproved.value = new BN(allowance.value).gtn(1); // should this be > 0?
+    tvl.value = "1234";
+    balance.value = "777";
+    allowance.value = "10";
+    isApproved.value = false;
 });
 
 async function startStream() {
-    try {
-        await Web3Util.createSuperFluidFlow(amountString.value, stratContract);
-        isStreaming.value = true;
-    } catch (e) {
-        showErrorToast(extractErrorMessage(e));
-    }
+    isStreaming.value = true;
 }
 
 async function approveSwap() {
-    try {
-        await Web3Util.approveSwap(props.strategy.address);
-        isApproved.value = true;
-    } catch (e) {
-        showErrorToast(extractErrorMessage(e));
-    }
+    isApproved.value = true;
 }
 
 async function buySwap() {
-    try {
-        await Web3Util.buySwap(stratContract, amountString.value);
-        isComplete.value = true;
-    } catch (e) {
-        showErrorToast(extractErrorMessage(e));
-    }
+    isComplete.value = true;
 }
 
 function showErrorToast(message: string) {

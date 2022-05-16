@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AboutView from "../views/AboutView.vue";
 import SwapsView from "../views/SwapsView.vue";
+import DummySwapsView from "../views/DummySwapsView.vue";
 
 // route level code-splitting: caused issues when accessing globals like window in route components
 
@@ -25,6 +26,11 @@ const router = createRouter({
             path: "/swaps",
             name: "swaps",
             component: SwapsView,
+        },
+        {
+            path: "/dummySwaps",
+            name: "dummySwaps",
+            component: DummySwapsView,
         },
     ],
 });
