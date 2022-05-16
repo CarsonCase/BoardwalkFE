@@ -138,7 +138,7 @@ function extractErrorMessage(error: any): string {
                         <b>Approved</b>
                     </p>
                     <button @click="buySwap" class="btn btn-primary" type="button">
-                        Complete Transaction
+                        Complete Purchase
                     </button>
                 </template>
 
