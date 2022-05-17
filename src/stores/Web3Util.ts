@@ -189,6 +189,12 @@ class Web3Util {
         const balance = await stableCoinContract.methods.balanceOf(treasuryContract._address).call();
         return Web3.utils.fromWei(balance);
     }
+
+    public async getUserAvailableCollateral() {
+        const treasuryContract = await this.getTreasuryContract();
+        const availableCollateral = await treasuryContract.methods.availableCollateral(this.userAddress).call();
+        return availableCollateral;
+    }
 }
 
 export default new Web3Util();
