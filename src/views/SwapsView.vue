@@ -11,7 +11,7 @@ const strategies = ref([
 </script>
 
 <template>
-    <div class="px-4 py-3 text-center" style="background-color: #3471c1">
+    <div class="px-4 py-3 text-center" style="background-color: var(--boardwalk-blue)">
         <h1 class="display-5 fw-bold text-light" style="text-shadow: -2px 2px black;">Swap Trading</h1>
         <div class="col-lg-6 mx-auto">
             <p class="lead fw-bold">View available strategies below</p>

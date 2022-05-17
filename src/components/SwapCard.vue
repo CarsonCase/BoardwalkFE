@@ -15,7 +15,6 @@ const props = defineProps({
 
 const tvl = ref("--");
 const balance = ref("--");
-const allowance = ref("--");
 const isApproved = ref(false);
 const isStreaming = ref(false);
 const amountString = ref("");
@@ -30,8 +29,8 @@ onMounted(async () => {
     const exposed = await stratContract.methods.underlyingExposedToSwaps().call();
     tvl.value = Web3.utils.fromWei(exposed);
     balance.value = Web3.utils.fromWei(new BN(invested).sub(new BN(exposed)));
-    allowance.value = await Web3Util.getAllowanceForStrategy(props.strategy);
-    isApproved.value = new BN(allowance.value).gtn(1); // should this be > 0?
+    const allowance = await Web3Util.getAllowanceForStrategy(props.strategy);
+    isApproved.value = new BN(allowance).gtn(1); // should this be > 0?
 });
 
 async function startStream() {
@@ -88,7 +87,7 @@ function extractErrorMessage(error: any): string {
                 <p class="m-0">Strategy</p>
                 <h2>{{ strategy.name }}</h2>
             </div>
-            <p class="mt-1"><b>ETH | xDAI</b></p>
+            <p class="mt-1"><b>ETH | DAIx</b></p>
             <div class="monopoly-details">
                 <div class="monopoly-rents">
                     <p>Balance Invested</p>
@@ -99,8 +98,8 @@ function extractErrorMessage(error: any): string {
                     <p>{{ tvl }} <i class="fa-brands fa-ethereum"></i></p>
                 </div>
                 <div class="monopoly-rents">
-                    <p>Allowance</p>
-                    <p>{{ allowance }} <i class="fa-brands fa-ethereum"></i></p>
+                    <p>Approved</p>
+                    <p>{{ isApproved }}</p>
                 </div>
 
                 <template v-if="!isStreaming">

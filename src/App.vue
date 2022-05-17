@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import { onMounted } from "vue";
+import Web3Util from "@/stores/Web3Util";
+onMounted(async () => {
+    await Web3Util.initWeb3();
+})
 </script>
 
 <template>

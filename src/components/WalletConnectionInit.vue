@@ -9,10 +9,10 @@ async function connectWallet() {
         await Web3Util.connectWallet();
         error.value = null;
     } catch (e) {
-        if (e instanceof Error) {
+        if (e instanceof Error || e.message) {
             error.value = e.message;
         } else {
-            error.value = String(e);
+            error.value = JSON.stringify(e);
         }
     }
 }

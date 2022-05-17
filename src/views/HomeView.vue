@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import Web3Util from "@/stores/Web3Util";
+import { onMounted, ref } from "vue";
 
+const totalValueInSwaps = ref<string | null>(null);
+
+onMounted(async () => {
+    totalValueInSwaps.value = await Web3Util.getTotalValueInSwaps();
+});
 </script>
 
 <template>
@@ -9,6 +16,14 @@
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4">DeFi Platform for Total Return Swap Trading</p>
         </div>
+    </div>
+
+    <div class="px-4 py-2 text-center text-light" style="background-color: var(--boardwalk-blue)">
+        <h1>Total Value Held in Swaps</h1>
+        <h1 v-if="Web3Util.isWeb3Loaded.value">{{ totalValueInSwaps }} <i class="fa-brands fa-ethereum"></i></h1>
+        <p v-else class="lead mb-4">
+            (MetaMask or another Web3 enabled browser is required to view swap data)
+        </p>
     </div>
     <div class="section-divider"></div>
 

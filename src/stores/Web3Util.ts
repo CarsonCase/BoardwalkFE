@@ -24,15 +24,28 @@ class Web3Util {
     private treasuryContract: Contract | null = null;
     private stableCoinContract: Contract | null = null;
 
+    public async initWeb3() {
+        const web3 = await this.getWeb3();
+        const accounts = await web3.currentProvider.request({ method: "eth_accounts" });
+        if (accounts[0]) {
+            // wallet is already connected, mark as such
+            await this.connectWallet();
+        }
+    }
+
     public async connectWallet() {
         try {
-            const { address, treasuryContract } = await this.loadBlockchainData();
+            const web3 = await this.getWeb3();
+            const accounts = await web3.currentProvider.request({ method: "eth_requestAccounts" });
             this.isWalletConnected.value = true;
             this.walletConnectedError.value = null;
-            this.userAddress = address;
-            this.treasuryContract = treasuryContract;
+            this.userAddress = accounts[0];
         } catch (e) {
-            if (e instanceof Error) {
+            if (e.code === 4001) {
+                this.isWalletConnected.value = false;
+                this.walletConnectedError.value = new Error("Connection Rejected, retry and approve the connection next time.");
+                throw this.walletConnectedError.value;
+            } else if (e instanceof Error) {
                 this.isWalletConnected.value = false;
                 this.walletConnectedError.value = e;
                 throw e;
@@ -74,11 +87,18 @@ class Web3Util {
         }
     }
 
-    private getTreasuryContract() {
+    private async getTreasuryContract() {
         if (this.treasuryContract) {
             return this.treasuryContract;
         }
-        throw new Error("Wallet is not connected, cannot interact with Treasury contract.");
+        try {
+            const web3 = await this.getWeb3();
+            this.treasuryContract = new web3.eth.Contract((Treasury.abi as AbiItem[]), Treasury.address);
+            return this.treasuryContract;
+        } catch (e) {
+            console.error(e);
+            throw new Error("Unable to create Treasury Contract instance");
+        }
     }
 
     private async getStableCoinContract() {
@@ -91,18 +111,16 @@ class Web3Util {
             this.stableCoinContract = new web3.eth.Contract((IERC20.abi as AbiItem[]), stableCoinAddress);
         } catch (e) {
             console.error(e);
-            throw new Error("Unable to get stable coin contract");
+            throw new Error("Unable to create Stable Coin Contract instance");
         }
 
         return this.stableCoinContract;
     }
 
     private async loadWeb3() {
-        //not sure if attaching to window is needed, keeping for now
         if ((window as any).ethereum) {
             const web3 = new Web3((window as any).ethereum);
             (window as any).web3 = web3;
-            await (window as any).ethereum.enable(); // hangs here waiting for user action. if metamask is X'ed out then this call fails when repeated.
             return web3;
         } else if ((window as any).web3) {
             const web3 = new Web3((window as any).web3.currentProvider);
@@ -111,15 +129,6 @@ class Web3Util {
         } else {
             return null;
         }
-    }
-
-    private async loadBlockchainData() {
-        const web3 = await this.getWeb3();
-        const accounts = await web3.eth.getAccounts();
-        const address = accounts[0];
-        const treasuryContract = new web3.eth.Contract((Treasury.abi as AbiItem[]), Treasury.address);
-
-        return { address, treasuryContract };
     }
 
     public async createSuperFluidFlow(amount: string, stratContract: Contract) {
@@ -171,7 +180,14 @@ class Web3Util {
     }
 
     public async buySwap(strategyContract: Contract, amount: string) {
-        await strategyContract.methods.buySwap(amount).send({from: this.userAddress});
+        await strategyContract.methods.buySwap(amount).send({ from: this.userAddress });
+    }
+
+    public async getTotalValueInSwaps() {
+        const treasuryContract = await this.getTreasuryContract();
+        const stableCoinContract = await this.getStableCoinContract();
+        const balance = await stableCoinContract.methods.balanceOf(treasuryContract._address).call();
+        return Web3.utils.fromWei(balance);
     }
 }
 

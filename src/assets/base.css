@@ -1,4 +1,6 @@
-
+:root {
+    --boardwalk-blue:#3471c1;
+}
 body {
     background-color: #dce0e3;
 }
@@ -27,7 +29,7 @@ for use in bootstrap / responsive sizing */
 
 .monopoly-card .monopoly-content .monopoly-title {
     width: 100%;
-    background-color: #3471c1;
+    background-color: var(--boardwalk-blue);
     display: flex;
     flex-direction: column;
     text-align: center;
