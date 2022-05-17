@@ -10,22 +10,25 @@ const props = defineProps({
     }
 });
 
+const totalInvested = ref("--");
 const tvl = ref("--");
 const balance = ref("--");
-const allowance = ref("--");
 const isApproved = ref(false);
 const isStreaming = ref(false);
 const amountString = ref("");
 const isComplete = ref(false);
+const isProcessing = ref(false);
+const percentUsed = ref(0);
 
 let stratContract: Contract;
 const toastErrorMessage = ref("");
 
 onMounted(async () => {
+    totalInvested.value = "2011";
     tvl.value = "1234";
     balance.value = "777";
-    allowance.value = "10";
     isApproved.value = false;
+    percentUsed.value = 69;
 });
 
 async function startStream() {
@@ -40,21 +43,6 @@ async function buySwap() {
     isComplete.value = true;
 }
 
-function showErrorToast(message: string) {
-    const toastElement = document.getElementById("errorToast");
-    toastErrorMessage.value = message;
-    // eslint-disable-next-line no-undef
-    const toast = new bootstrap.Toast(toastElement);
-    toast.show();
-}
-
-function extractErrorMessage(error: any): string {
-    if (error.message) {
-        return error.message;
-    }
-    return JSON.stringify(error);
-}
-
 </script>
 
 <template>
@@ -64,10 +52,17 @@ function extractErrorMessage(error: any): string {
                 <p class="m-0">Strategy</p>
                 <h2>{{ strategy.name }}</h2>
             </div>
-            <p class="mt-1"><b>ETH | xDAI</b></p>
+            <p class="mt-1"><b>Strategy Capacity</b></p>
+            <div class="progress position-relative w-100">
+                <div class="progress-bar" role="progressbar" :style="{width: percentUsed +'%'}"></div>
+                <small class="justify-content-center d-flex position-absolute w-100 fw-bold">
+                    {{ tvl }} / {{ totalInvested }}
+                </small>
+            </div>
+
             <div class="monopoly-details">
                 <div class="monopoly-rents">
-                    <p>Balance Invested</p>
+                    <p>Balance Remaining</p>
                     <p>{{ balance }} <i class="fa-brands fa-ethereum"></i></p>
                 </div>
                 <div class="monopoly-rents">
@@ -75,52 +70,61 @@ function extractErrorMessage(error: any): string {
                     <p>{{ tvl }} <i class="fa-brands fa-ethereum"></i></p>
                 </div>
                 <div class="monopoly-rents">
-                    <p>Allowance</p>
-                    <p>{{ allowance }} <i class="fa-brands fa-ethereum"></i></p>
+                    <p>APR</p>
+                    <p>12%</p>
+                </div>
+                <div class="monopoly-rents">
+                    <p>Approved</p>
+                    <p>{{ isApproved }}</p>
                 </div>
 
-                <template v-if="!isStreaming">
-                    <p class="extra">
-                        <b>Create Steam to Invest</b>
-                    </p>
-                    <div class="input-group">
-                        <input v-model.trim="amountString" type="number" class="form-control" placeholder="Amount">
-                        <button @click="startStream" class="btn btn-secondary" type="button">
-                            Stream
-                            <i class="fa-brands fa-ethereum"></i>
+                <template v-if="isProcessing">
+                    <div class="spinner-border mt-3"></div>
+                </template>
+                <template v-else>
+                    <template v-if="!isStreaming">
+                        <p class="extra">
+                            <b>Create Steam to Invest</b>
+                        </p>
+                        <div class="input-group">
+                            <input v-model.trim="amountString" type="number" class="form-control" placeholder="Amount">
+                            <button @click="startStream" class="btn btn-secondary" type="button">
+                                Stream
+                                <i class="fa-brands fa-ethereum"></i>
+                            </button>
+                        </div>
+                    </template>
+
+                    <template v-if="!isApproved && isStreaming">
+                        <p class="extra">
+                            <b>Amount</b>
+                            {{ amountString }} <i class="fa-brands fa-ethereum"></i>
+                        </p>
+                        <p class="extra">
+                            <b>SmartContract requires funds approval</b>
+                        </p>
+                        <button @click="approveSwap" class="btn btn-success" type="button">
+                            Approve SmartContract Access <i class="fa-solid fa-check"></i>
                         </button>
+                    </template>
+
+                    <template v-if="isApproved && isStreaming && !isComplete">
+                        <p class="extra">
+                            <b>Amount</b>
+                            {{ amountString }} <i class="fa-brands fa-ethereum"></i>
+                        </p>
+                        <p class="extra">
+                            <b>Approved</b>
+                        </p>
+                        <button @click="buySwap" class="btn btn-primary" type="button">
+                            Complete Purchase
+                        </button>
+                    </template>
+
+                    <div v-if="isComplete">
+                        <span>Acquired {{ amountString }}</span>
                     </div>
                 </template>
-
-                <template v-if="!isApproved && isStreaming">
-                    <p class="extra">
-                        <b>Amount</b>
-                        {{ amountString }} <i class="fa-brands fa-ethereum"></i>
-                    </p>
-                    <p class="extra">
-                        <b>SmartContract requires funds approval</b>
-                    </p>
-                    <button @click="approveSwap" class="btn btn-success" type="button">
-                        Approve SmartContract Access <i class="fa-solid fa-check"></i>
-                    </button>
-                </template>
-
-                <template v-if="isApproved && isStreaming && !isComplete">
-                    <p class="extra">
-                        <b>Amount</b>
-                        {{ amountString }} <i class="fa-brands fa-ethereum"></i>
-                    </p>
-                    <p class="extra">
-                        <b>Approved</b>
-                    </p>
-                    <button @click="buySwap" class="btn btn-primary" type="button">
-                        Complete Purchase
-                    </button>
-                </template>
-
-                <div v-if="isComplete">
-                    <span>Acquired {{ amountString }}</span>
-                </div>
             </div>
         </div>
     </div>

@@ -8,6 +8,7 @@ import Web3Util from "@/stores/Web3Util";
 const strategies = ref([
     new Strategy("ETH Holding", "0x4e706CbbE94B2867BA35A989fbe9859bEC045759")
 ]);
+const availableCollateral = ref<string | null>("15");
 </script>
 
 <template>
@@ -21,6 +22,15 @@ const strategies = ref([
     <div class="container-lg">
         <h2 v-if="!Web3Util.isWalletConnected.value" class="my-3">Connect wallet to view & start trading swaps</h2>
         <WalletConnectionInit />
+        <div v-if="availableCollateral">
+            <div class="card col-md-6 col-xl-4 my-3">
+                <div class="card-body">
+                    <h4 v-if="Web3Util.isWalletConnected.value" class="mb-0">
+                        Available Collateral: ${{ availableCollateral }}
+                    </h4>
+                </div>
+            </div>
+        </div>
 
         <div v-if="Web3Util.isWalletConnected.value">
             <div class="row">
