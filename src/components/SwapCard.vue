@@ -139,7 +139,7 @@ function extractErrorMessage(error: any): string {
                             <b>Create Steam to Invest</b>
                         </p>
                         <div class="input-group">
-                            <input v-model.trim="amountString" type="number" class="form-control" placeholder="Amount">
+                            <input v-model.trim="amountString" type="number" min="0" step="1" oninput="validity.valid||(value='');" class="form-control" placeholder="Amount">
                             <button @click="startStream" class="btn btn-secondary" type="button">
                                 Stream
                                 <i class="fa-brands fa-ethereum"></i>
