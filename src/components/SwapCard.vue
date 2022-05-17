@@ -19,6 +19,7 @@ const isApproved = ref(false);
 const isStreaming = ref(false);
 const amountString = ref("");
 const isComplete = ref(false);
+const isProcessing = ref(false);
 
 let stratContract: Contract;
 const toastErrorMessage = ref("");
@@ -35,28 +36,40 @@ onMounted(async () => {
 
 async function startStream() {
     try {
+        isProcessing.value = true;
         await Web3Util.createSuperFluidFlow(amountString.value, stratContract);
         isStreaming.value = true;
     } catch (e) {
+        console.error(e);
         showErrorToast(extractErrorMessage(e));
+    } finally {
+        isProcessing.value = false;
     }
 }
 
 async function approveSwap() {
     try {
+        isProcessing.value = true;
         await Web3Util.approveSwap(props.strategy.address);
         isApproved.value = true;
     } catch (e) {
+        console.error(e);
         showErrorToast(extractErrorMessage(e));
+    } finally {
+        isProcessing.value = false;
     }
 }
 
 async function buySwap() {
     try {
+        isProcessing.value = true;
         await Web3Util.buySwap(stratContract, amountString.value);
         isComplete.value = true;
     } catch (e) {
+        console.error(e);
         showErrorToast(extractErrorMessage(e));
+    } finally {
+        isProcessing.value = false;
     }
 }
 
@@ -98,52 +111,61 @@ function extractErrorMessage(error: any): string {
                     <p>{{ tvl }} <i class="fa-brands fa-ethereum"></i></p>
                 </div>
                 <div class="monopoly-rents">
+                    <p>APR</p>
+                    <p>12%</p>
+                </div>
+                <div class="monopoly-rents">
                     <p>Approved</p>
                     <p>{{ isApproved }}</p>
                 </div>
 
-                <template v-if="!isStreaming">
-                    <p class="extra">
-                        <b>Create Steam to Invest</b>
-                    </p>
-                    <div class="input-group">
-                        <input v-model.trim="amountString" type="number" class="form-control" placeholder="Amount">
-                        <button @click="startStream" class="btn btn-secondary" type="button">
-                            Stream
-                            <i class="fa-brands fa-ethereum"></i>
+                <template v-if="isProcessing">
+                    <div class="spinner-border mt-3"></div>
+                </template>
+                <template v-else>
+                    <template v-if="!isStreaming">
+                        <p class="extra">
+                            <b>Create Steam to Invest</b>
+                        </p>
+                        <div class="input-group">
+                            <input v-model.trim="amountString" type="number" class="form-control" placeholder="Amount">
+                            <button @click="startStream" class="btn btn-secondary" type="button">
+                                Stream
+                                <i class="fa-brands fa-ethereum"></i>
+                            </button>
+                        </div>
+                    </template>
+
+                    <template v-if="!isApproved && isStreaming">
+                        <p class="extra">
+                            <b>Amount</b>
+                            {{ amountString }} <i class="fa-brands fa-ethereum"></i>
+                        </p>
+                        <p class="extra">
+                            <b>SmartContract requires funds approval</b>
+                        </p>
+                        <button @click="approveSwap" class="btn btn-success" type="button">
+                            Approve SmartContract Access <i class="fa-solid fa-check"></i>
                         </button>
+                    </template>
+
+                    <template v-if="isApproved && isStreaming && !isComplete">
+                        <p class="extra">
+                            <b>Amount</b>
+                            {{ amountString }} <i class="fa-brands fa-ethereum"></i>
+                        </p>
+                        <p class="extra">
+                            <b>Approved</b>
+                        </p>
+                        <button @click="buySwap" class="btn btn-primary" type="button">
+                            Complete Purchase
+                        </button>
+                    </template>
+
+                    <div v-if="isComplete">
+                        <span>Acquired {{ amountString }}</span>
                     </div>
                 </template>
-
-                <template v-if="!isApproved && isStreaming">
-                    <p class="extra">
-                        <b>Amount</b>
-                        {{ amountString }} <i class="fa-brands fa-ethereum"></i>
-                    </p>
-                    <p class="extra">
-                        <b>SmartContract requires funds approval</b>
-                    </p>
-                    <button @click="approveSwap" class="btn btn-success" type="button">
-                        Approve SmartContract Access <i class="fa-solid fa-check"></i>
-                    </button>
-                </template>
-
-                <template v-if="isApproved && isStreaming && !isComplete">
-                    <p class="extra">
-                        <b>Amount</b>
-                        {{ amountString }} <i class="fa-brands fa-ethereum"></i>
-                    </p>
-                    <p class="extra">
-                        <b>Approved</b>
-                    </p>
-                    <button @click="buySwap" class="btn btn-primary" type="button">
-                        Complete Purchase
-                    </button>
-                </template>
-
-                <div v-if="isComplete">
-                    <span>Acquired {{ amountString }}</span>
-                </div>
             </div>
         </div>
     </div>
