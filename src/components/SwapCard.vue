@@ -13,6 +13,7 @@ const props = defineProps({
     }
 });
 
+const totalInvested = ref("--");
 const tvl = ref("--");
 const balance = ref("--");
 const isApproved = ref(false);
@@ -20,6 +21,7 @@ const isStreaming = ref(false);
 const amountString = ref("");
 const isComplete = ref(false);
 const isProcessing = ref(false);
+const percentUsed = ref(0);
 
 let stratContract: Contract;
 const toastErrorMessage = ref("");
@@ -27,11 +29,13 @@ const toastErrorMessage = ref("");
 onMounted(async () => {
     stratContract = await Web3Util.getStrategyContractInstance(props.strategy);
     const invested = await stratContract.methods.underlyingInvested().call();
+    totalInvested.value = Web3.utils.fromWei(invested);
     const exposed = await stratContract.methods.underlyingExposedToSwaps().call();
     tvl.value = Web3.utils.fromWei(exposed);
     balance.value = Web3.utils.fromWei(new BN(invested).sub(new BN(exposed)));
     const allowance = await Web3Util.getAllowanceForStrategy(props.strategy);
     isApproved.value = new BN(allowance).gtn(1); // should this be > 0?
+    percentUsed.value = (100 * exposed) / invested;
 });
 
 async function startStream() {
@@ -100,10 +104,17 @@ function extractErrorMessage(error: any): string {
                 <p class="m-0">Strategy</p>
                 <h2>{{ strategy.name }}</h2>
             </div>
-            <p class="mt-1"><b>ETH | DAIx</b></p>
+            <p class="mt-1"><b>Strategy Capacity</b></p>
+            <div class="progress position-relative w-100">
+                <div class="progress-bar" role="progressbar" :style="{width: percentUsed +'%'}"></div>
+                <small class="justify-content-center d-flex position-absolute w-100 fw-bold">
+                    {{ tvl }} / {{ totalInvested }}
+                </small>
+            </div>
+
             <div class="monopoly-details">
                 <div class="monopoly-rents">
-                    <p>Balance Invested</p>
+                    <p>Balance Remaining</p>
                     <p>{{ balance }} <i class="fa-brands fa-ethereum"></i></p>
                 </div>
                 <div class="monopoly-rents">
