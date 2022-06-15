@@ -67,7 +67,8 @@ async function approveSwap() {
 async function buySwap() {
     try {
         isProcessing.value = true;
-        await Web3Util.buySwap(stratContract, amountString.value);
+        console.log(Web3.utils.toWei(amountString.value).toString());
+        await Web3Util.buySwap(stratContract, Web3.utils.toWei(amountString.value));
         isComplete.value = true;
     } catch (e) {
         console.error(e);

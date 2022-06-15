@@ -10,7 +10,7 @@ import { ethers } from "ethers";
 import { Framework } from "@superfluid-finance/sdk-core";
 import BN from "bn.js";
 
-const TREASURY_ADDRESS = "0x6D992c2a6B112F856d2D7da364b5453c6c94f60e";
+const SWAPS_ADDRESS = "0x02A71165447028cA575990416aBb6E10350225c4";
 
 class Web3Util {
     public isWeb3Loaded = ref(false);
@@ -136,6 +136,7 @@ class Web3Util {
         const web3 = await this.getWeb3();
 
         const signer = provider.getSigner();
+        console.log("createFlow Amount: ", web3.utils.toWei(amount).toString())
         const flowRate = await stratContract.methods.getFlowRate(web3.utils.toWei(amount)).call();
 
         const chainId = await (window as any).ethereum.request({ method: "eth_chainId" });
@@ -147,7 +148,7 @@ class Web3Util {
         const DAIx = DAIxContract.address;
         try {
             const createFlowOperation = sf.cfaV1.createFlow({
-                receiver: TREASURY_ADDRESS,
+                receiver: SWAPS_ADDRESS,
                 flowRate: flowRate,
                 superToken: DAIx
             });
@@ -157,11 +158,11 @@ class Web3Util {
 
             console.log(
                 `Congrats - you've just created a money stream!
-                View Your Stream At: https://app.superfluid.finance/dashboard/${TREASURY_ADDRESS}
+                View Your Stream At: https://app.superfluid.finance/dashboard/${SWAPS_ADDRESS}
                 Network: Kovan
                 Super Token: DAIx
                 Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
-                Receiver: ${TREASURY_ADDRESS},
+                Receiver: ${SWAPS_ADDRESS},
                 FlowRate: ${flowRate}
                 `
             );
@@ -180,6 +181,7 @@ class Web3Util {
     }
 
     public async buySwap(strategyContract: Contract, amount: string) {
+        console.log("BuySwap Amount: ", amount.toString());
         await strategyContract.methods.buySwap(amount).send({ from: this.userAddress });
     }
 

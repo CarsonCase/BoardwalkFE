@@ -6,7 +6,7 @@ import SwapCard from "@/components/SwapCard.vue";
 import Web3Util from "@/stores/Web3Util";
 
 const strategies = ref([
-    new Strategy("ETH Holding", "0x4e706CbbE94B2867BA35A989fbe9859bEC045759")
+    new Strategy("ETH Holding", "0xC87E8550E55CC1dB0EB9c35518D0C356c34165A1")
 ]);
 const availableCollateral = ref<string | null>(null);
 
