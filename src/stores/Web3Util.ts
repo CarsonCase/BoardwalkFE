@@ -138,6 +138,7 @@ class Web3Util {
         const signer = provider.getSigner();
         console.log("createFlow Amount: ", web3.utils.toWei(amount).toString())
         const flowRate = await stratContract.methods.getFlowRate(web3.utils.toWei(amount)).call();
+        console.log("createFlow Rate: ", flowRate.toString())
 
         const chainId = await (window as any).ethereum.request({ method: "eth_chainId" });
         const sf = await Framework.create({
