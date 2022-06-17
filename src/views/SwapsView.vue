@@ -37,10 +37,10 @@ watchEffect(async () => {
         strategy ranging from simple eth holding like this to complex yearn vault style governance submitted strategies.
         
         Swap payments are made using Superfluid, a protocol that allows special wrapped stablecoins to stream steadily overtime according to an rate, in this case the APR.</p>
-        <p>click <a href="https://app.superfluid.finance/dashboard">here</a> to get your xDAI tokens needed to stream your swap payments. Note you can also see your active streams here and cancel them.
+        <p>click <a href="https://app.superfluid.finance/dashboard">here</a> to get your xDAI tokens needed to stream your swap payments. Note you can also see your active streams here and cancel them.</p>
         <p>Those xDAI tokens are also used to provide your minimum 10% collateral. We use 10% mimum collateral for ETH Holding here as it was showin in a Value At Risk model to be sufficent in 95% of market conditions.</p>
-        <p>Now set up a swap! You will need to connect your wallet, decide the amount of ETH you want to purchase a swap on, start a stream, approve collateral, then begin the swap </p>
-        <p>Now it's time to change the price of the ETH (wish we could do that on mainnet huh?) You can see the current price of 1 (1e18) ETH (in xDAI) and change it <a href="https://rinkeby.etherscan.io/address/0x80cf0e0d515f78cD6EDE4D0F07F0C574BeC09664#readContract">here</a>
+        <p>Now set up a swap below! You will need to connect your wallet, decide the amount of ETH you want to purchase a swap on, start a stream, approve collateral, then begin the swap </p>
+        <p>Now it's time to change the price of the ETH (wish we could do that on mainnet huh?) You can see the current price of 1 (1e18) ETH (in xDAI) and change it <a href="https://rinkeby.etherscan.io/address/0x80cf0e0d515f78cD6EDE4D0F07F0C574BeC09664#readContract">here</a></p>
         <P>A swap is settled upon termination. Either party may terminate it, but for testing we let you do it. Head back to the superfluid dashboard and cancel your swap. The resulting tx should include your settlement, or reduce your colalteral in the treasury contract <a href="https://rinkeby.etherscan.io/address/0x512a98Fc56fE78d88B837883b47192c0DE4D7831#readContract">seen here</a></p>
         <WalletConnectionInit />
         <div v-if="availableCollateral">

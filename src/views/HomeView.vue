@@ -65,9 +65,11 @@ onMounted(async () => {
                 </li>
     
             </ul>
+            <p class="lead">
             Bob could issue Lisa a TRS. This way Lisa pays her $2,000/m to Bob (12% APR on the $200,000 house). And in exchange, Lisa is paid, or pays 
             the difference in value later when the house is refinanced.
             Here's two scenarios after a year.
+            </p>
             <ul class="lead">
                 <li>
                 The house is worth $5,000 less, Lisa owes Bob $5,000 so he has been protected
