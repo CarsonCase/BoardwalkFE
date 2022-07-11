@@ -43,7 +43,6 @@ onMounted(async () => {
                 Let’s use an easy to understand example with a hotel to understand the flow of cash in a TRS, as well as why someone would enter one:
             </p>
             <img src="../assets/HotelAnalogy.drawio.png">
-            </img>
             <p class="lead mb-4">
                 A landlord owns a Hotel and collects rent payments from the hotel manager. The hotel manager rents out to guests and gets to keep all the profits of the hotel. Meanwhile, if a rowdy guest breaks something in the hotel, the manager has to fix it as he’s doing something risky by letting all sorts of people stay there.
                 <br><br>
