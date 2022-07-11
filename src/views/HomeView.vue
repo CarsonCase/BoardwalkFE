@@ -31,55 +31,27 @@ onMounted(async () => {
         <div class="col-lg-8 mx-auto">
             <h2 class="fw-bold">What is Boardwalk?</h2>
             <p class="lead mb-4">
-                Boardwalk is a DAO that issues Total Return Swaps (TRS), a derivative for leveraging positions. In defi
-                it’s very difficult to find leverage over 100% as most lending protocols require upwards of 150%
-                collateral. And considering that the users of DeFi have a near infinite appetite for risk, many
-                protocols have risen to the challenge of offering more tools for users to leverage. At the same time,
-                larger actors like institutions and DAOs have a hard time avoiding risk even with stablecoin staking.
-                The Total Return Swap allows us to exchange the power of a large treasury with stability and income from
-                risk seeking investors.
+                Boardwalk is a DAO that issues Total Return Swaps, a derivative from traditional finance that allow users to swap insurance + a fee for the total return of an asset. 
+                This essentially allows for 1 party to turn anything into a stable yield bearing asset while the other party can receive undercollateralized leverage for a fee.
                 <br><br>
-                On lending platforms in DeFi you need upwards of 100% collateral. And for most derivative or under collateralized lending based yield systems, the yield earner is taking
-                on more risk, not less. But not with the TRS, here users can get leverage while the providers of capital are receiving downside protection.
+                On lending platforms in DeFi you need upwards of 100% collateral. And Stablecoins are no longer considered safe enough to be the only low-risk asset in DeFi.
+                The Total Return Swap solves these issues by swapping flexable, powerful leverage to one party and price stability with passive income to another.
             </p>
 
-            <h2 class="fw-bold">What is a Total Return Swap (TRS)?</h2>
+            <h2 class="fw-bold">ELIF Total Return Swaps</h2>
             <p class="lead">
-                A TRS is an agreement to “swap” incomes. Swapping basic income (ex. $5 a month) with the “total return”
-                of an asset. (Ex. earning $10 if an asset increases by $10) or (Ex. paying $5 if it decreases $5).
+                Let’s use an easy to understand example with a hotel to understand the flow of cash in a TRS, as well as why someone would enter one:
+            </p>
+            <img src="../assets/HotelAnalogy.drawio.png">
+            </img>
+            <p class="lead mb-4">
+                A landlord owns a Hotel and collects rent payments from the hotel manager. The hotel manager rents out to guests and gets to keep all the profits of the hotel. Meanwhile, if a rowdy guest breaks something in the hotel, the manager has to fix it as he’s doing something risky by letting all sorts of people stay there.
                 <br><br>
-                Let’s use an easy to understand example with houses:
+                Notice the landlord SWAPPED out his risk of damages, as well as all potential profits in return for his rent checks. He decided he’d rather let someone else collect the profits as long as they also deal with all the problems guests bring.
+                <br>
+                Now imagine that instead of a hotel you had some onchain investment. You could make this whole process automated by a smart contract! That's Boardwalk. A protocol where you can choose to be the profit seeking hotel manager
+                who must pay out of pocket for the investments poor performance, but also get's it's returns when it preforms well. Or you can be the careful landlord who will sacrifice your investment's profits for the sake of trusty passive income.
             </p>
-            <ul class="lead">
-                <li>
-                    Bob has a rental property worth $200,000 that cashflows $2,500 a month.
-                    <ul>
-                        <li>But he is afraid of a dip in the housing market.</li>
-                    </ul>
-                </li>
-                <li>
-                    Lisa has some extra income ($2,000 a month) and want’s to invest in real estate.
-                    <ul>
-                        <li>But she doesn’t have $200,000 to put down on a house</li>
-                    </ul>
-                </li>
-    
-            </ul>
-            <p class="lead">
-            Bob could issue Lisa a TRS. This way Lisa pays her $2,000/m to Bob (12% APR on the $200,000 house). And in exchange, Lisa is paid, or pays 
-            the difference in value later when the house is refinanced.
-            Here's two scenarios after a year.
-            </p>
-            <ul class="lead">
-                <li>
-                The house is worth $5,000 less, Lisa owes Bob $5,000 so he has been protected
-                from the market downturn he feared.
-                </li>
-                <li>
-                The market booms and the house is worth $50,000 more. Bob pays lisa the $50,000, which he doesn't mind as he gets to keep a now $250,000 house.
-                Especially since he was still earning the $2,000 a month swap payments from Lisa over the year.
-                </li>
-            </ul>
         </div>
     </div>
 </template>
